@@ -1,14 +1,25 @@
+Mappings: 
+  RegionMap: 
+    us-east-1: 
+      AMI: "ami-0ff8a91507f77f867"
+    us-east-2: 
+      AMI: "ami-02d1e544b84bf7502"
+    ap-south-1: 
+      AMI: "ami-08df646e18b182346"
 Resources:
   MyInstance:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.micro
-      ImageId: ami-0cff7528ff583bf9a
+      ImageId: !FindInMap 
+        - RegionMap
+        - !Ref AWS::Region
+        - AMI
       Tags: 
        - Key: "Name"
          Value: !Join ["-",[my,first,instance]]
       SecurityGroups: 
-        - !Ref Testingsg   
+        - !Ref Testingsg  
   Testingsg:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -22,4 +33,3 @@ Resources:
         FromPort: 22
         ToPort: 22
         CidrIp: 0.0.0.0/0
-      
